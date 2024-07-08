@@ -8,6 +8,7 @@
 #define ITERATIONS 10000
 
 pthread_mutex_t mutex;
+pthread_cond_t signal;
 
 int counter;
 
@@ -16,16 +17,20 @@ void* count_up(void* args){
 		usleep(SLEEP_TIME);
 		pthread_mutex_lock(&mutex);
 		counter++;
+		pthread_cond_signal(&signal);
 		pthread_mutex_unlock(&mutex);
 	}
 	return NULL;	
 }
 
 void* count_down(void* args){
-	for (size_t i = 0; i < ITERATIONS; i++) {
+	for (size_t i = 0; i < ITERATIONS/5; i++) {
 		usleep(SLEEP_TIME);
 		pthread_mutex_lock(&mutex);
-		counter--;
+		while(counter<5){
+			pthread_cond_wait(&signal, &mutex);
+		}
+		counter-=5;
 		pthread_mutex_unlock(&mutex);
 	}
 	return NULL;	
@@ -35,6 +40,7 @@ void* count_down(void* args){
 int main(int argc, char *argv[]){
 	
 	pthread_mutex_init(&mutex,NULL);
+	pthread_cond_init(&signal, NULL);
 	// Identifier für die Threads
 	pthread_t up_t;
 	pthread_t down_t;

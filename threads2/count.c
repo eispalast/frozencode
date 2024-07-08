@@ -4,7 +4,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define SLEEP_TIME 100 //µsec
+#define SLEEP_TIME 50 //µsec
 #define ITERATIONS 10000
 
 int counter;
@@ -12,20 +12,20 @@ pthread_mutex_t mut;
 
 void* count_up(void* args){
 	for (size_t i = 0; i < ITERATIONS; i++) {
+		usleep(SLEEP_TIME);
 		pthread_mutex_lock(&mut);
 		counter++;
 		pthread_mutex_unlock(&mut);
-		usleep(SLEEP_TIME);
 	}
 	return NULL;	
 }
 
 void* count_down(void* args){
 	for (size_t i = 0; i < ITERATIONS; i++) {
+		usleep(SLEEP_TIME);
 		pthread_mutex_lock(&mut);
 		counter--;
 		pthread_mutex_unlock(&mut);
-		usleep(SLEEP_TIME);
 	}
 	return NULL;	
 }

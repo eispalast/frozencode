@@ -4,23 +4,23 @@
 #include <time.h>
 #include <unistd.h>
 
-#define SLEEP_TIME 100 //µsec
+#define SLEEP_TIME 50 //µsec
 #define ITERATIONS 10000
 
 int counter;
 
 void* count_up(void* args){
 	for (size_t i = 0; i < ITERATIONS; i++) {
-		counter++;
 		usleep(SLEEP_TIME);
+		counter++;
 	}
 	return NULL;	
 }
 
 void* count_down(void* args){
 	for (size_t i = 0; i < ITERATIONS; i++) {
-		counter--;
 		usleep(SLEEP_TIME);
+		counter--;
 	}
 	return NULL;	
 }
